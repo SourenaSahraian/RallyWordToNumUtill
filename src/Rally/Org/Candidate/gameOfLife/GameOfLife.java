@@ -1,20 +1,27 @@
 package Rally.Org.Candidate.gameOfLife;
+
 import java.util.Random;
 
 
 public class GameOfLife {
 	
+	
 public static final  int size=5;
 	
-	private  void IterateBoard(int[][] board) {
 
+	private  int[][] IterateBoard(int[][] board) {
+		
+		int[][] evolvedBoard= new int[size][size];
+		
+	//	int count=1;
 		for(int i=0; i< board.length;i++){
 			for(int j=0; j< board.length;j++){
+				// current cell
 				
 				int currentCell= board[i][j];
 				int liveCellsCount=0;
-			
-				//find neighbors for the current cell
+				
+				//survey neighbors
 				//right
 				if(verify(i,j+1)){
 					if(board[i][j+1] ==1 ){
@@ -79,33 +86,35 @@ public static final  int size=5;
 						}
 						
 					}
-					// modify currnet element according to set of rules
-					evolve(board, i, j, currentCell, liveCellsCount);
 
-			}
+					evolve(board, evolvedBoard, i, j, currentCell,
+							liveCellsCount);
+
+			}// end of currnet element
 
 		}
+		return evolvedBoard;
 	}
 
 
 
-
-/**
- * Decsion making is made here.
- * @param board
- * @param i
- * @param j
- * @param currentCell
- * @param liveCellsCount
- */
-	private void evolve(int[][] board, int i, int j, int currentCell,
-			int liveCellsCount) {
-		//Decision is made here.
+	/**
+	 * Decsion making is done here.
+	 * @param board
+	 * @param evolvedBoard
+	 * @param i
+	 * @param j
+	 * @param currentCell
+	 * @param liveCellsCount
+	 */
+	private void evolve(int[][] board, int[][] evolvedBoard, int i, int j,
+			int currentCell, int liveCellsCount) {
+		evolvedBoard[i][j]=board[i][j];
 		//if alive ; 
 		if(currentCell ==1){
 			//kill due to over population - or lack of live neighbors
 			if(liveCellsCount >  3   || ( liveCellsCount< 2) )   {
-				board[i][j]=0; // kill
+				evolvedBoard[i][j]=0; // kill
 			}	
 		}
 		//if dead
@@ -113,12 +122,14 @@ public static final  int size=5;
 		else{
 			if(liveCellsCount == 3 ){
 				 //Resurrect if the dead cell has exactly 3 live neighbors
-				board[i][j]=1;
+				evolvedBoard[i][j]=1;
 			}
 		}
 	}
 
-	
+
+
+
 
 	private void makeBoard(Random rand, int[][] board) {
 		for(int i=0; i< board.length;i++){
@@ -149,27 +160,66 @@ public static final  int size=5;
 
 	}
 	
-
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		
-		GameOfLife game = new GameOfLife();
+		 GameOfLife game = new  GameOfLife();
 		Random rand = new Random();
 		int[][] board= new int[size][size];
+
+		
+		board[0][0]=0;
+		board[0][1]=1;		
+		board[0][2]=0;
+		board[0][3]=0;
+		board[0][4]=0;
+		
+		board[1][0]=1;
+		board[1][1]=0;		
+		
+		
+		board[1][2]=0;
+		board[1][3]=1;
+		board[1][4]=1;
+		
+		board[2][0]=1;
+		board[2][1]=1;		
+		board[2][2]=0;
+		board[2][3]=0;
+		board[2][4]=1;
+		
+		
+		
+		board[3][0]=0;
+		board[3][1]=1;		
+		board[3][2]=0;
+		board[3][3]=0;
+		board[3][4]=0;
+		
+		
 	
-		game.makeBoard(rand, board);
+		board[4][0]=1;
+		board[4][1]=0;		
+		board[4][2]=0;
+		board[4][3]=0;
+		board[4][4]=1;
+		
+
+		//game.makeBoard(rand, board);
 		System.out.println("The Orginal board !");
 		game.printBoard(board);
 
-		game.IterateBoard(board);
+		int[][] evolvedBoard=game.IterateBoard(board);
+		
 		System.out.println("Evolved board");
-		game.printBoard(board);
+		game.printBoard(evolvedBoard);
+
 
 	}
-
 
 	
 
 }
+
